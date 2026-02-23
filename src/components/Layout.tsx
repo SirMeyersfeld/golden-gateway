@@ -62,8 +62,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <button className="gradient-gold text-primary-foreground px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
-              Invest Now
+            <span className="text-xs text-muted-foreground border border-border rounded-md px-2 py-1">
+              {roleLabel}
+            </span>
+            <div className="flex items-center gap-2 text-sm text-foreground">
+              <User className="w-4 h-4 text-muted-foreground" />
+              <span className="max-w-[120px] truncate">{user?.email}</span>
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-secondary"
+            >
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
 
