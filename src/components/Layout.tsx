@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X } from "lucide-react";
+import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const navItems = [
   { label: "Overview", path: "/", icon: LayoutDashboard },
