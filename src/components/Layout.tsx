@@ -14,7 +14,19 @@ const navItems = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const { user, role, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out");
+    } catch {
+      toast.error("Failed to sign out");
+    }
+  };
+
+  const roleLabel = role === "fund_manager" ? "Fund Manager" : "Investor";
 
   return (
     <div className="min-h-screen bg-background">
