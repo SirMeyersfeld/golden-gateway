@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X } from "lucide-react";
+import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X, LogOut, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const navItems = [
   { label: "Overview", path: "/", icon: LayoutDashboard },
@@ -12,7 +14,19 @@ const navItems = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const { user, role, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out");
+    } catch {
+      toast.error("Failed to sign out");
+    }
+  };
+
+  const roleLabel = role === "fund_manager" ? "Fund Manager" : "Investor";
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,8 +62,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <button className="gradient-gold text-primary-foreground px-5 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
-              Invest Now
+            <span className="text-xs text-muted-foreground border border-border rounded-md px-2 py-1">
+              {roleLabel}
+            </span>
+            <div className="flex items-center gap-2 text-sm text-foreground">
+              <User className="w-4 h-4 text-muted-foreground" />
+              <span className="max-w-[120px] truncate">{user?.email}</span>
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-lg hover:bg-secondary"
+            >
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
 
