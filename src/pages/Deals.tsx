@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Clock, TrendingUp, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const deals = [
   {
@@ -166,9 +167,12 @@ export default function Deals() {
                 </div>
 
                 {deal.status === "open" && (
-                  <button className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-colors">
-                    View Details <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
+                  <Link
+                    to={`/invest?deal=${encodeURIComponent(deal.name)}`}
+                    className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-colors"
+                  >
+                    Invest via SPV <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
                 )}
               </div>
             </motion.div>
