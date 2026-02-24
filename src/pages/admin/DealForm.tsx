@@ -78,17 +78,33 @@ export default function DealForm() {
 
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
-      const payload = {
-        ...values,
-        closing_date: values.closing_date || null,
-        description: values.description || null,
-        created_by: user!.id,
-      };
       if (isEdit) {
-        const { error } = await supabase.from("deals").update(payload).eq("id", id!);
+        const { error } = await supabase.from("deals").update({
+          name: values.name,
+          sector: values.sector,
+          stage: values.stage,
+          target_irr: values.target_irr,
+          target_amount: values.target_amount,
+          minimum_investment: values.minimum_investment,
+          status: values.status,
+          closing_date: values.closing_date || null,
+          description: values.description || null,
+          created_by: user!.id,
+        }).eq("id", id!);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("deals").insert([payload]);
+        const { error } = await supabase.from("deals").insert([{
+          name: values.name,
+          sector: values.sector,
+          stage: values.stage,
+          target_irr: values.target_irr,
+          target_amount: values.target_amount,
+          minimum_investment: values.minimum_investment,
+          status: values.status,
+          closing_date: values.closing_date || null,
+          description: values.description || null,
+          created_by: user!.id,
+        }]);
         if (error) throw error;
       }
     },
