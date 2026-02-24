@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X, LogOut, User } from "lucide-react";
+import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X, LogOut, User, Settings } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,6 +11,8 @@ const navItems = [
   { label: "Portfolio", path: "/portfolio", icon: PieChart },
   { label: "Documents", path: "/documents", icon: FileText },
 ];
+
+const adminNavItem = { label: "Admin", path: "/admin", icon: Settings };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -42,8 +44,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const active = location.pathname === item.path;
+            {[...navItems, ...(role === "fund_manager" ? [adminNavItem] : [])].map((item) => {
+              const active = item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path);
               return (
                 <Link
                   key={item.path}
@@ -95,8 +97,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className="md:hidden border-t border-border overflow-hidden"
             >
               <nav className="px-4 py-3 flex flex-col gap-1">
-                {navItems.map((item) => {
-                  const active = location.pathname === item.path;
+                {[...navItems, ...(role === "fund_manager" ? [adminNavItem] : [])].map((item) => {
+                  const active = item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path);
                   return (
                     <Link
                       key={item.path}

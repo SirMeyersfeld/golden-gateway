@@ -14,6 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
+      capital_calls: {
+        Row: {
+          amount: number
+          call_number: number
+          created_at: string
+          created_by: string
+          deal_id: string
+          due_date: string
+          id: string
+          notes: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          call_number?: number
+          created_at?: string
+          created_by: string
+          deal_id: string
+          due_date: string
+          id?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          call_number?: number
+          created_at?: string
+          created_by?: string
+          deal_id?: string
+          due_date?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capital_calls_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals: {
+        Row: {
+          closing_date: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          minimum_investment: number
+          name: string
+          raised_amount: number
+          sector: string
+          stage: string
+          status: string
+          target_amount: number
+          target_irr: string
+          updated_at: string
+        }
+        Insert: {
+          closing_date?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          minimum_investment?: number
+          name: string
+          raised_amount?: number
+          sector: string
+          stage?: string
+          status?: string
+          target_amount?: number
+          target_irr?: string
+          updated_at?: string
+        }
+        Update: {
+          closing_date?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          minimum_investment?: number
+          name?: string
+          raised_amount?: number
+          sector?: string
+          stage?: string
+          status?: string
+          target_amount?: number
+          target_irr?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      investments: {
+        Row: {
+          amount: number
+          created_at: string
+          deal_id: string
+          id: string
+          investor_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          deal_id: string
+          id?: string
+          investor_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          deal_id?: string
+          id?: string
+          investor_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

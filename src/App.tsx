@@ -13,6 +13,11 @@ import Documents from "./pages/Documents";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManageDeals from "./pages/admin/ManageDeals";
+import DealForm from "./pages/admin/DealForm";
+import Investors from "./pages/admin/Investors";
+import CapitalCalls from "./pages/admin/CapitalCalls";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +41,12 @@ const App = () => (
                       <Route path="/deals" element={<Deals />} />
                       <Route path="/portfolio" element={<Portfolio />} />
                       <Route path="/documents" element={<Documents />} />
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route path="/admin/deals" element={<ManageDeals />} />
+                      <Route path="/admin/deals/new" element={<DealForm />} />
+                      <Route path="/admin/deals/:id/edit" element={<DealForm />} />
+                      <Route path="/admin/investors" element={<Investors />} />
+                      <Route path="/admin/capital-calls" element={<CapitalCalls />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Layout>
