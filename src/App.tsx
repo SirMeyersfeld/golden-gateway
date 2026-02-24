@@ -13,6 +13,7 @@ import Documents from "./pages/Documents";
 import Auth from "./pages/Auth";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
+import InvestWizard from "./pages/InvestWizard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageDeals from "./pages/admin/ManageDeals";
 import DealForm from "./pages/admin/DealForm";
