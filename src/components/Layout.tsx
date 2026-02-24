@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X, LogOut, User } from "lucide-react";
+import { LayoutDashboard, Briefcase, PieChart, FileText, Menu, X, LogOut, User, Settings } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,6 +11,8 @@ const navItems = [
   { label: "Portfolio", path: "/portfolio", icon: PieChart },
   { label: "Documents", path: "/documents", icon: FileText },
 ];
+
+const adminNavItem = { label: "Admin", path: "/admin", icon: Settings };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
