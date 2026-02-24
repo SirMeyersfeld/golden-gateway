@@ -41,6 +41,12 @@ const App = () => (
                       <Route path="/deals" element={<Deals />} />
                       <Route path="/portfolio" element={<Portfolio />} />
                       <Route path="/documents" element={<Documents />} />
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route path="/admin/deals" element={<ManageDeals />} />
+                      <Route path="/admin/deals/new" element={<DealForm />} />
+                      <Route path="/admin/deals/:id/edit" element={<DealForm />} />
+                      <Route path="/admin/investors" element={<Investors />} />
+                      <Route path="/admin/capital-calls" element={<CapitalCalls />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Layout>

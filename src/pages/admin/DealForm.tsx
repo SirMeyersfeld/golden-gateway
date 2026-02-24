@@ -88,7 +88,7 @@ export default function DealForm() {
         const { error } = await supabase.from("deals").update(payload).eq("id", id!);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("deals").insert(payload);
+        const { error } = await supabase.from("deals").insert([payload]);
         if (error) throw error;
       }
     },
