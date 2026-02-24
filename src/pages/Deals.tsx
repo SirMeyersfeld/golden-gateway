@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Clock, TrendingUp, DollarSign } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const deals = [
   {
