@@ -97,8 +97,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className="md:hidden border-t border-border overflow-hidden"
             >
               <nav className="px-4 py-3 flex flex-col gap-1">
-                {navItems.map((item) => {
-                  const active = location.pathname === item.path;
+                {[...navItems, ...(role === "fund_manager" ? [adminNavItem] : [])].map((item) => {
+                  const active = item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path);
                   return (
                     <Link
                       key={item.path}
