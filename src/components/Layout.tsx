@@ -44,8 +44,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const active = location.pathname === item.path;
+            {[...navItems, ...(role === "fund_manager" ? [adminNavItem] : [])].map((item) => {
+              const active = item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path);
               return (
                 <Link
                   key={item.path}
