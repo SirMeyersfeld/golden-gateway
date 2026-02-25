@@ -1,14 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Briefcase, TrendingUp, Mail, Lock, User } from "lucide-react";
+import { Briefcase, TrendingUp, Mail, Lock, User, Shield, CheckCircle2, ArrowRight } from "lucide-react";
 
 type Mode = "login" | "signup" | "forgot";
 type AppRole = "investor" | "fund_manager";
+
+const trustIndicators = [
+  { icon: Shield, text: "SEC-compliant SPV structures" },
+  { icon: CheckCircle2, text: "Bank-grade encryption" },
+  { icon: TrendingUp, text: "$2.4B+ assets under management" },
+];
 
 export default function Auth() {
   const { signIn, signUp, resetPassword } = useAuth();
@@ -43,71 +49,172 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
-      >
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-lg gradient-gold mx-auto mb-4" />
-          <h1 className="font-display text-2xl font-bold gradient-gold-text">
-            Vanguard Capital
-          </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            {mode === "login" && "Sign in to your account"}
-            {mode === "signup" && "Create your account"}
-            {mode === "forgot" && "Reset your password"}
-          </p>
+    <div className="min-h-screen flex bg-background">
+      {/* Left panel — branding & trust */}
+      <div className="hidden lg:flex lg:w-[48%] relative overflow-hidden">
+        {/* Background layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-card to-background" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-primary/[0.04] blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-primary/[0.03] blur-[100px]" />
+        <div className="absolute inset-0 texture-noise" />
+
+        <div className="relative flex flex-col justify-between p-12 xl:p-16 w-full">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg gradient-gold" />
+            <span className="font-display text-xl font-semibold gradient-gold-text tracking-tight">
+              Vanguard Capital
+            </span>
+          </div>
+
+          {/* Hero text */}
+          <div className="max-w-md">
+            <h1 className="font-display text-4xl xl:text-5xl font-bold leading-[1.15] mb-6 text-balance">
+              Institutional-Grade
+              <br />
+              <span className="gradient-gold-text">Private Equity</span>
+              <br />
+              Access
+            </h1>
+            <p className="text-muted-foreground leading-relaxed text-[15px]">
+              Join 2,400+ accredited investors deploying capital into
+              top-quartile opportunities through our regulated platform.
+            </p>
+
+            {/* Trust indicators */}
+            <div className="mt-10 space-y-4">
+              {trustIndicators.map((item, i) => (
+                <motion.div
+                  key={item.text}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + i * 0.12 }}
+                  className="flex items-center gap-3"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <span className="text-sm text-secondary-foreground">{item.text}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center gap-6 text-xs text-muted-foreground">
+            <span>SEC Registered</span>
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+            <span>SOC 2 Type II</span>
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+            <span>FINRA Member</span>
+          </div>
         </div>
+      </div>
 
-        <div className="glass rounded-xl p-6 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {mode === "signup" && (
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm text-muted-foreground">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="John Smith"
-                    className="pl-10 bg-secondary border-border"
-                    required
-                  />
-                </div>
-              </div>
-            )}
+      {/* Right panel — form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-card/30 via-transparent to-card/30 lg:hidden" />
 
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-muted-foreground">Email</Label>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="w-full max-w-[400px] relative"
+        >
+          {/* Mobile logo */}
+          <div className="lg:hidden text-center mb-10">
+            <div className="w-10 h-10 rounded-lg gradient-gold mx-auto mb-3" />
+            <h1 className="font-display text-xl font-semibold gradient-gold-text">
+              Vanguard Capital
+            </h1>
+          </div>
+
+          {/* Form header */}
+          <div className="mb-8">
+            <h2 className="font-display text-2xl font-bold mb-1.5">
+              {mode === "login" && "Welcome back"}
+              {mode === "signup" && "Create your account"}
+              {mode === "forgot" && "Reset password"}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              {mode === "login" && "Sign in to access your portfolio and deals."}
+              {mode === "signup" && "Get started with institutional-grade investing."}
+              {mode === "forgot" && "We'll send you a link to reset your password."}
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <AnimatePresence mode="wait">
+              {mode === "signup" && (
+                <motion.div
+                  key="name"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-1.5"
+                >
+                  <Label htmlFor="name" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    Full Name
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="John Smith"
+                      className="pl-11 h-11 bg-muted/50 border-border/60 focus:border-primary/40 focus:bg-muted/70 transition-colors"
+                      required
+                    />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Email Address
+              </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="pl-10 bg-secondary border-border"
+                  className="pl-11 h-11 bg-muted/50 border-border/60 focus:border-primary/40 focus:bg-muted/70 transition-colors"
                   required
                 />
               </div>
             </div>
 
             {mode !== "forgot" && (
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm text-muted-foreground">Password</Label>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    Password
+                  </Label>
+                  {mode === "login" && (
+                    <button
+                      type="button"
+                      onClick={() => setMode("forgot")}
+                      className="text-xs text-primary/80 hover:text-primary transition-colors"
+                    >
+                      Forgot?
+                    </button>
+                  )}
+                </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="pl-10 bg-secondary border-border"
+                    className="pl-11 h-11 bg-muted/50 border-border/60 focus:border-primary/40 focus:bg-muted/70 transition-colors"
                     required
                     minLength={6}
                   />
@@ -115,77 +222,102 @@ export default function Auth() {
               </div>
             )}
 
-            {mode === "signup" && (
-              <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">I am a...</Label>
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setRole("investor")}
-                    className={`flex items-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${
-                      role === "investor"
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:border-muted-foreground"
-                    }`}
-                  >
-                    <TrendingUp className="w-4 h-4" />
-                    Investor
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole("fund_manager")}
-                    className={`flex items-center gap-2 p-3 rounded-lg border text-sm font-medium transition-all ${
-                      role === "fund_manager"
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:border-muted-foreground"
-                    }`}
-                  >
-                    <Briefcase className="w-4 h-4" />
-                    Fund Manager
-                  </button>
-                </div>
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {mode === "signup" && (
+                <motion.div
+                  key="role"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-1.5"
+                >
+                  <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    Account Type
+                  </Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { value: "investor" as AppRole, label: "Investor", icon: TrendingUp, desc: "Browse & invest" },
+                      { value: "fund_manager" as AppRole, label: "Fund Manager", icon: Briefcase, desc: "Manage deals" },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setRole(opt.value)}
+                        className={`flex flex-col items-start gap-1 p-3.5 rounded-lg border text-left transition-all duration-200 ${
+                          role === opt.value
+                            ? "border-primary/40 bg-primary/[0.07] shadow-[inset_0_0_0_1px_hsl(38_60%_56%/0.15)]"
+                            : "border-border/60 bg-muted/30 hover:border-border hover:bg-muted/50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <opt.icon className={`w-4 h-4 ${role === opt.value ? "text-primary" : "text-muted-foreground"}`} />
+                          <span className={`text-sm font-medium ${role === opt.value ? "text-foreground" : "text-secondary-foreground"}`}>
+                            {opt.label}
+                          </span>
+                        </div>
+                        <span className="text-xs text-muted-foreground">{opt.desc}</span>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full gradient-gold text-primary-foreground py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="w-full gradient-gold text-primary-foreground h-11 rounded-lg text-sm font-semibold hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2 glow-gold mt-2"
             >
-              {loading ? "Please wait..." : mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send Reset Link"}
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+              ) : (
+                <>
+                  {mode === "login" ? "Sign In" : mode === "signup" ? "Create Account" : "Send Reset Link"}
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </form>
 
-          <div className="text-center text-sm space-y-2">
+          {/* Mode switcher */}
+          <div className="mt-8 text-center">
+            <div className="divider-gold mb-6" />
             {mode === "login" && (
-              <>
-                <button onClick={() => setMode("forgot")} className="text-primary hover:underline block w-full">
-                  Forgot password?
+              <p className="text-sm text-muted-foreground">
+                Don't have an account?{" "}
+                <button onClick={() => setMode("signup")} className="text-primary font-medium hover:text-primary/80 transition-colors">
+                  Create one
                 </button>
-                <p className="text-muted-foreground">
-                  Don't have an account?{" "}
-                  <button onClick={() => setMode("signup")} className="text-primary hover:underline">
-                    Sign up
-                  </button>
-                </p>
-              </>
+              </p>
             )}
             {mode === "signup" && (
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
-                <button onClick={() => setMode("login")} className="text-primary hover:underline">
+                <button onClick={() => setMode("login")} className="text-primary font-medium hover:text-primary/80 transition-colors">
                   Sign in
                 </button>
               </p>
             )}
             {mode === "forgot" && (
-              <button onClick={() => setMode("login")} className="text-primary hover:underline">
-                Back to sign in
+              <button
+                onClick={() => setMode("login")}
+                className="text-sm text-primary font-medium hover:text-primary/80 transition-colors"
+              >
+                ← Back to sign in
               </button>
             )}
           </div>
-        </div>
-      </motion.div>
+
+          {/* Mobile trust bar */}
+          <div className="lg:hidden mt-10 flex items-center justify-center gap-4 text-[11px] text-muted-foreground">
+            <span>SEC Registered</span>
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+            <span>SOC 2 Type II</span>
+            <span className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+            <span>FINRA</span>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }
