@@ -131,31 +131,32 @@ export default function AdminDashboard() {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
-                <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(40 65% 55%)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(40 65% 55%)" stopOpacity={0} />
+                <linearGradient id="brandGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.28} />
+                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 20% 18%)" />
               <XAxis dataKey="month" stroke="hsl(220 15% 55%)" fontSize={12} />
               <YAxis stroke="hsl(220 15% 55%)" fontSize={12} tickFormatter={(v) => `$${v / 1e6}M`} />
               <Tooltip
-                contentStyle={{ background: "hsl(222 40% 10%)", border: "1px solid hsl(222 20% 18%)", borderRadius: "8px" }}
-                labelStyle={{ color: "hsl(40 20% 92%)" }}
+                contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }}
+                labelStyle={{ color: "hsl(var(--foreground))" }}
                 formatter={(v: number) => [formatCurrency(v), "Raised"]}
               />
-              <Area type="monotone" dataKey="raised" stroke="hsl(40 65% 55%)" fill="url(#goldGrad)" strokeWidth={2} />
+              <Area type="monotone" dataKey="raised" stroke="hsl(var(--primary))" fill="url(#brandGrad)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </motion.div>
 
       {/* Quick links */}
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-4 gap-4">
         {[
           { label: "Manage Deals", to: "/admin/deals", desc: `${deals.length} deals` },
           { label: "View Investors", to: "/admin/investors", desc: `${totalInvestors} investors` },
           { label: "Capital Calls", to: "/admin/capital-calls", desc: `${pendingCalls} pending` },
+          { label: "Content Studio", to: "/admin/studio", desc: "Landing & marketing copy" },
         ].map((link, i) => (
           <motion.div key={link.to} variants={fade} initial="hidden" animate="visible" custom={5 + i}>
             <Link

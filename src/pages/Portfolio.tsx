@@ -93,9 +93,9 @@ export default function Portfolio() {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
-                <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(40 65% 55%)" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="hsl(40 65% 55%)" stopOpacity={0} />
+                <linearGradient id="brandGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.26} />
+                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 20% 18%)" />
@@ -103,18 +103,18 @@ export default function Portfolio() {
               <YAxis stroke="hsl(220 15% 55%)" fontSize={12} />
               <Tooltip
                 contentStyle={{
-                  background: "hsl(222 40% 10%)",
-                  border: "1px solid hsl(222 20% 18%)",
+                  background: "hsl(var(--popover))",
+                  border: "1px solid hsl(var(--border))",
                   borderRadius: "8px",
-                  color: "hsl(40 20% 92%)",
+                  color: "hsl(var(--foreground))",
                 }}
               />
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke="hsl(40 65% 55%)"
+                stroke="hsl(var(--primary))"
                 strokeWidth={2}
-                fill="url(#goldGrad)"
+                fill="url(#brandGrad)"
               />
             </AreaChart>
           </ResponsiveContainer>

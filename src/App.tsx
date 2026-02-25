@@ -19,6 +19,7 @@ import ManageDeals from "./pages/admin/ManageDeals";
 import DealForm from "./pages/admin/DealForm";
 import Investors from "./pages/admin/Investors";
 import CapitalCalls from "./pages/admin/CapitalCalls";
+import Studio from "./pages/admin/Studio";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
                       <Route path="/admin/deals/:id/edit" element={<DealForm />} />
                       <Route path="/admin/investors" element={<Investors />} />
                       <Route path="/admin/capital-calls" element={<CapitalCalls />} />
+                      <Route path="/admin/studio" element={<Studio />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Layout>

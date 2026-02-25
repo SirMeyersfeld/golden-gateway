@@ -245,7 +245,7 @@ export default function Auth() {
                         onClick={() => setRole(opt.value)}
                         className={`flex flex-col items-start gap-1 p-3.5 rounded-lg border text-left transition-all duration-200 ${
                           role === opt.value
-                            ? "border-primary/40 bg-primary/[0.07] shadow-[inset_0_0_0_1px_hsl(38_60%_56%/0.15)]"
+                            ? "border-primary/40 bg-primary/[0.07] ring-1 ring-primary/20"
                             : "border-border/60 bg-muted/30 hover:border-border hover:bg-muted/50"
                         }`}
                       >

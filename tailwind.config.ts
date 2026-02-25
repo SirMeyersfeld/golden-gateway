@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Playfair Display", "serif"],
+        display: ["Space Grotesk", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -52,13 +52,13 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         gold: {
-          DEFAULT: "hsl(40 65% 55%)",
-          light: "hsl(38 75% 60%)",
-          dark: "hsl(42 55% 45%)",
-          muted: "hsl(40 30% 40%)",
+          DEFAULT: "hsl(217 92% 60%)",
+          light: "hsl(212 96% 68%)",
+          dark: "hsl(235 84% 66%)",
+          muted: "hsl(217 22% 38%)",
         },
         navy: {
-          DEFAULT: "hsl(222 47% 6%)",
+          DEFAULT: "hsl(222 55% 6%)",
           light: "hsl(222 40% 12%)",
           mid: "hsl(222 35% 16%)",
         },
