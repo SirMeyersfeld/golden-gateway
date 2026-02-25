@@ -1,77 +1,10 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, Clock, TrendingUp, DollarSign } from "lucide-react";
+import { ArrowUpRight, Clock, TrendingUp, DollarSign, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-const deals = [
-  {
-    name: "Aether Robotics",
-    sector: "Deep Tech",
-    stage: "Series C",
-    targetIrr: "32%",
-    raised: 18_500_000,
-    target: 25_000_000,
-    minimum: "$100K",
-    status: "open" as const,
-    closing: "Mar 15, 2026",
-  },
-  {
-    name: "NovaPay",
-    sector: "Fintech",
-    stage: "Growth Equity",
-    targetIrr: "26%",
-    raised: 42_000_000,
-    target: 50_000_000,
-    minimum: "$250K",
-    status: "open" as const,
-    closing: "Apr 1, 2026",
-  },
-  {
-    name: "BioSphere Health",
-    sector: "Healthcare",
-    stage: "Series B",
-    targetIrr: "35%",
-    raised: 12_000_000,
-    target: 20_000_000,
-    minimum: "$50K",
-    status: "open" as const,
-    closing: "Mar 28, 2026",
-  },
-  {
-    name: "Helios Energy",
-    sector: "CleanTech",
-    stage: "Late Stage",
-    targetIrr: "22%",
-    raised: 80_000_000,
-    target: 80_000_000,
-    minimum: "$500K",
-    status: "closed" as const,
-    closing: "Feb 10, 2026",
-  },
-  {
-    name: "Stratos Cloud",
-    sector: "Enterprise SaaS",
-    stage: "Series D",
-    targetIrr: "28%",
-    raised: 30_000_000,
-    target: 60_000_000,
-    minimum: "$100K",
-    status: "open" as const,
-    closing: "May 5, 2026",
-  },
-  {
-    name: "Quantum Ledger",
-    sector: "Infrastructure",
-    stage: "Series A",
-    targetIrr: "40%",
-    raised: 5_000_000,
-    target: 15_000_000,
-    minimum: "$25K",
-    status: "upcoming" as const,
-    closing: "Jun 1, 2026",
-  },
-];
-
-const statusConfig = {
+const statusConfig: Record<string, { label: string; className: string }> = {
   open: { label: "Open", className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
   closed: { label: "Closed", className: "bg-red-500/10 text-red-400 border-red-500/20" },
   upcoming: { label: "Upcoming", className: "bg-primary/10 text-primary border-primary/20" },
@@ -83,6 +16,26 @@ function formatCurrency(n: number) {
 }
 
 export default function Deals() {
+  const { data: deals = [], isLoading } = useQuery({
+    queryKey: ["deals"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("deals")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.div
@@ -100,11 +53,11 @@ export default function Deals() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {deals.map((deal, i) => {
-          const pct = Math.round((deal.raised / deal.target) * 100);
-          const st = statusConfig[deal.status];
+          const pct = deal.target_amount ? Math.round((deal.raised_amount / deal.target_amount) * 100) : 0;
+          const st = statusConfig[deal.status] ?? statusConfig.upcoming;
           return (
             <motion.div
-              key={deal.name}
+              key={deal.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
@@ -132,19 +85,19 @@ export default function Deals() {
                     <p className="text-xs text-muted-foreground flex items-center gap-1">
                       <TrendingUp className="w-3 h-3" /> Target IRR
                     </p>
-                    <p className="text-sm font-semibold text-primary">{deal.targetIrr}</p>
+                    <p className="text-sm font-semibold text-primary">{deal.target_irr}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground flex items-center gap-1">
                       <DollarSign className="w-3 h-3" /> Minimum
                     </p>
-                    <p className="text-sm font-semibold">{deal.minimum}</p>
+                    <p className="text-sm font-semibold">{formatCurrency(deal.minimum_investment)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground flex items-center gap-1">
                       <Clock className="w-3 h-3" /> Closing
                     </p>
-                    <p className="text-sm font-semibold">{deal.closing}</p>
+                    <p className="text-sm font-semibold">{deal.closing_date ?? "TBD"}</p>
                   </div>
                 </div>
 
@@ -152,10 +105,10 @@ export default function Deals() {
                 <div className="mb-3">
                   <div className="flex justify-between text-xs mb-1.5">
                     <span className="text-muted-foreground">
-                      {formatCurrency(deal.raised)} raised
+                      {formatCurrency(deal.raised_amount)} raised
                     </span>
                     <span className="text-muted-foreground">
-                      {formatCurrency(deal.target)} target
+                      {formatCurrency(deal.target_amount)} target
                     </span>
                   </div>
                   <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
