@@ -58,12 +58,12 @@ export default function Studio() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["cms-blocks"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("cms_blocks")
         .select("*")
         .order("key", { ascending: true });
       if (error) throw error;
-      return data as CmsBlock[];
+      return (data ?? []) as CmsBlock[];
     },
   });
 
@@ -102,7 +102,7 @@ export default function Studio() {
         data: parsed,
       };
 
-      const { error } = await supabase.from("cms_blocks").upsert(payload, {
+      const { error } = await (supabase as any).from("cms_blocks").upsert(payload, {
         onConflict: "key",
       });
       if (error) throw error;

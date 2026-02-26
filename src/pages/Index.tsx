@@ -72,12 +72,12 @@ export default function Index() {
   const { data: cmsBlocks } = useQuery<CmsBlock[]>({
     queryKey: ["cms-landing"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("cms_blocks")
         .select("*")
         .in("key", ["landing_hero", "landing_stats"]);
       if (error) throw error;
-      return data as CmsBlock[];
+      return (data ?? []) as CmsBlock[];
     },
   });
 
@@ -110,7 +110,7 @@ export default function Index() {
         ? { duration: 0.2 }
         : {
             delay: 0.3 + i * 0.05,
-            type: "spring",
+            type: "spring" as const,
             stiffness: 720,
             damping: 40,
           },
