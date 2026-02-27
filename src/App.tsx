@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
@@ -45,6 +47,7 @@ const App = () => (
                       <Route path="/portfolio" element={<Portfolio />} />
                       <Route path="/documents" element={<Documents />} />
                       <Route path="/invest" element={<InvestWizard />} />
+
                       <Route path="/admin" element={<AdminDashboard />} />
                       <Route path="/admin/deals" element={<ManageDeals />} />
                       <Route path="/admin/deals/new" element={<DealForm />} />
@@ -52,6 +55,7 @@ const App = () => (
                       <Route path="/admin/investors" element={<Investors />} />
                       <Route path="/admin/capital-calls" element={<CapitalCalls />} />
                       <Route path="/admin/studio" element={<Studio />} />
+
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Layout>
@@ -62,7 +66,9 @@ const App = () => (
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
+
     <Analytics />
+    <SpeedInsights />
   </QueryClientProvider>
 );
 
