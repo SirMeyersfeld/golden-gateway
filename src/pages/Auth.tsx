@@ -12,7 +12,7 @@ type AppRole = "investor" | "fund_manager";
 
 const trustIndicators = [
   { icon: Shield, text: "SEC-compliant SPV structures" },
-  { icon: CheckCircle2, text: "Bank-grade encryption" },
+  { icon: CheckCircle2, text: "Built by Liam Meyersfeld" },
   { icon: TrendingUp, text: "$2.4B+ assets under management" },
 ];
 
