@@ -20,7 +20,7 @@ const itemVariants = {
   hidden: { opacity: 0, x: -16, scale: 0.98 },
   visible: (i: number) => ({
     opacity: 1, x: 0, scale: 1,
-    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }),
 };
 
