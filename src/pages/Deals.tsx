@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Clock, TrendingUp, DollarSign, Loader2, Search, SlidersHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +21,21 @@ function formatCurrency(n: number) {
 }
 
 type SortOption = "newest" | "oldest" | "target_high" | "target_low" | "raised";
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: i * 0.07,
+      duration: 0.45,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  }),
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
+};
 
 export default function Deals() {
   const [search, setSearch] = useState("");
@@ -78,7 +93,12 @@ export default function Deals() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        >
+          <Loader2 className="w-8 h-8 text-primary" />
+        </motion.div>
       </div>
     );
   }
@@ -86,8 +106,9 @@ export default function Deals() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mb-10"
       >
         <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">
@@ -99,7 +120,12 @@ export default function Deals() {
       </motion.div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.4 }}
+        className="flex flex-col sm:flex-row gap-3 mb-8"
+      >
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -144,95 +170,119 @@ export default function Deals() {
             <SelectItem value="raised">Most Raised</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </motion.div>
 
-      {filtered.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
-          No deals match your filters.
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {filtered.length === 0 ? (
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="text-center py-16 text-muted-foreground"
+          >
+            No deals match your filters.
+          </motion.div>
+        ) : (
+          <motion.div
+            key="grid"
+            initial="hidden"
+            animate="visible"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filtered.map((deal, i) => {
+              const pct = deal.target_amount ? Math.round((deal.raised_amount / deal.target_amount) * 100) : 0;
+              const st = statusConfig[deal.status] ?? statusConfig.upcoming;
+              return (
+                <motion.div
+                  key={deal.id}
+                  variants={cardVariants}
+                  custom={i}
+                  whileHover={{ y: -6, scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                  whileTap={{ scale: 0.98 }}
+                  className="glass-hover rounded-xl overflow-hidden group cursor-pointer"
+                >
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">
+                          {deal.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {deal.sector} · {deal.stage}
+                        </p>
+                      </div>
+                      <motion.span
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: i * 0.07 + 0.2 }}
+                        className={`text-xs font-medium px-2.5 py-1 rounded-full border ${st.className}`}
+                      >
+                        {st.label}
+                      </motion.span>
+                    </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((deal, i) => {
-          const pct = deal.target_amount ? Math.round((deal.raised_amount / deal.target_amount) * 100) : 0;
-          const st = statusConfig[deal.status] ?? statusConfig.upcoming;
-          return (
-            <motion.div
-              key={deal.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="glass-hover rounded-xl overflow-hidden group cursor-pointer"
-            >
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">
-                      {deal.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {deal.sector} · {deal.stage}
-                    </p>
-                  </div>
-                  <span
-                    className={`text-xs font-medium px-2.5 py-1 rounded-full border ${st.className}`}
-                  >
-                    {st.label}
-                  </span>
-                </div>
+                    <div className="grid grid-cols-3 gap-3 mb-5">
+                      <div>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <TrendingUp className="w-3 h-3" /> Target IRR
+                        </p>
+                        <p className="text-sm font-semibold text-primary">{deal.target_irr}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <DollarSign className="w-3 h-3" /> Minimum
+                        </p>
+                        <p className="text-sm font-semibold">{formatCurrency(deal.minimum_investment)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> Closing
+                        </p>
+                        <p className="text-sm font-semibold">{deal.closing_date ?? "TBD"}</p>
+                      </div>
+                    </div>
 
-                <div className="grid grid-cols-3 gap-3 mb-5">
-                  <div>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <TrendingUp className="w-3 h-3" /> Target IRR
-                    </p>
-                    <p className="text-sm font-semibold text-primary">{deal.target_irr}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <DollarSign className="w-3 h-3" /> Minimum
-                    </p>
-                    <p className="text-sm font-semibold">{formatCurrency(deal.minimum_investment)}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> Closing
-                    </p>
-                    <p className="text-sm font-semibold">{deal.closing_date ?? "TBD"}</p>
-                  </div>
-                </div>
+                    {/* Animated progress bar */}
+                    <div className="mb-3">
+                      <div className="flex justify-between text-xs mb-1.5">
+                        <span className="text-muted-foreground">
+                          {formatCurrency(deal.raised_amount)} raised
+                        </span>
+                        <span className="text-muted-foreground">
+                          {formatCurrency(deal.target_amount)} target
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min(pct, 100)}%` }}
+                          transition={{ delay: i * 0.07 + 0.3, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                          className="h-full rounded-full gradient-gold"
+                        />
+                      </div>
+                    </div>
 
-                {/* Progress bar */}
-                <div className="mb-3">
-                  <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-muted-foreground">
-                      {formatCurrency(deal.raised_amount)} raised
-                    </span>
-                    <span className="text-muted-foreground">
-                      {formatCurrency(deal.target_amount)} target
-                    </span>
+                    {deal.status === "open" && (
+                      <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <Link
+                          to={`/invest?deal=${encodeURIComponent(deal.name)}`}
+                          className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all duration-200 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.1)]"
+                        >
+                          Invest via SPV <ArrowUpRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </motion.div>
+                    )}
                   </div>
-                  <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
-                    <div
-                      className="h-full rounded-full gradient-gold transition-all duration-500"
-                      style={{ width: `${Math.min(pct, 100)}%` }}
-                    />
-                  </div>
-                </div>
-
-                {deal.status === "open" && (
-                  <Link
-                    to={`/invest?deal=${encodeURIComponent(deal.name)}`}
-                    className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-colors"
-                  >
-                    Invest via SPV <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
-                )}
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
