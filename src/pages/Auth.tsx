@@ -125,8 +125,7 @@ export default function Auth() {
           <div className="lg:hidden text-center mb-10">
             <div className="w-10 h-10 rounded-lg gradient-gold mx-auto mb-3" />
             <h1 className="font-display text-xl font-semibold gradient-gold-text">
-              Vanguard Capital
-            </h1>
+Capital Harbour            </h1>
           </div>
 
           {/* Form header */}
