@@ -47,7 +47,7 @@ export default function ResetPassword() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="font-display text-2xl font-bold gradient-gold-text">Set New Password</h1>
+          <h1 className="text-2xl font-extrabold text-foreground">Set New Password</h1>
         </div>
         <div className="glass rounded-xl p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -70,7 +70,7 @@ export default function ResetPassword() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full gradient-gold text-primary-foreground py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="w-full btn-teal py-2.5 rounded-lg text-sm font-semibold transition-opacity disabled:opacity-50"
             >
               {loading ? "Updating..." : "Update Password"}
             </button>

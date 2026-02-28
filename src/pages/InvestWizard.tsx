@@ -103,11 +103,11 @@ export default function InvestWizard() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", duration: 0.6 }}>
-          <div className="w-20 h-20 rounded-full gradient-gold flex items-center justify-center mx-auto mb-6 glow-gold">
-            <CheckCircle2 className="w-10 h-10 text-primary-foreground" />
+          <div className="w-20 h-20 rounded-full bg-brand-teal flex items-center justify-center mx-auto mb-6 glow-gold">
+            <CheckCircle2 className="w-10 h-10 text-white" />
           </div>
         </motion.div>
-        <h1 className="font-display text-3xl font-bold mb-3">Investment Committed</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground">Investment Committed</h1>
         <p className="text-muted-foreground mb-2">
           You've committed <span className="text-foreground font-semibold">{formatCurrency(parseInt(amount))}</span> to{" "}
           <span className="text-foreground font-semibold">{selectedDeal?.name}</span>
@@ -116,7 +116,7 @@ export default function InvestWizard() {
           You'll receive confirmation and next steps via email. Capital call notices will be sent before due dates.
         </p>
         <div className="flex gap-3 justify-center">
-          <Button onClick={() => navigate("/portfolio")} className="gradient-gold text-primary-foreground hover:opacity-90">
+          <Button onClick={() => navigate("/portfolio")} className="btn-teal hover:opacity-90">
             View Portfolio
           </Button>
           <Button variant="outline" onClick={() => navigate("/deals")}>
@@ -145,15 +145,15 @@ export default function InvestWizard() {
         {STEPS.map((s, i) => (
           <div key={s.label} className="flex items-center flex-1">
             <div className={`flex items-center justify-center w-9 h-9 rounded-full shrink-0 transition-all duration-300 ${
-              i < step ? "gradient-gold text-primary-foreground" :
-              i === step ? "border-2 border-primary text-primary" :
+              i < step ? "bg-brand-teal text-white" :
+              i === step ? "border-2 border-brand-teal text-brand-teal" :
               "border border-border text-muted-foreground"
             }`}>
               {i < step ? <Check className="w-4 h-4" /> : <s.icon className="w-4 h-4" />}
             </div>
             {i < STEPS.length - 1 && (
               <div className={`h-0.5 flex-1 mx-1 rounded transition-colors duration-300 ${
-                i < step ? "bg-primary" : "bg-border"
+                i < step ? "bg-brand-teal" : "bg-border"
               }`} />
             )}
           </div>
@@ -198,7 +198,7 @@ export default function InvestWizard() {
                         <p className="text-sm text-muted-foreground">{deal.sector} · {deal.stage}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-semibold text-primary">{deal.target_irr} IRR</p>
+                        <p className="text-sm font-semibold text-brand-teal">{deal.target_irr} IRR</p>
                         <p className="text-xs text-muted-foreground">Min {formatCurrency(Number(deal.minimum_investment))}</p>
                       </div>
                     </div>
@@ -225,7 +225,7 @@ export default function InvestWizard() {
                 <h2 className="font-display text-xl font-semibold mb-2">Investment Amount</h2>
                 <p className="text-sm text-muted-foreground">
                   Enter the amount you'd like to invest in <span className="text-foreground">{selectedDeal.name}</span>.
-                  Minimum investment: <span className="text-primary font-medium">{formatCurrency(Number(selectedDeal.minimum_investment))}</span>
+                  Minimum investment: <span className="text-brand-teal font-medium">{formatCurrency(Number(selectedDeal.minimum_investment))}</span>
                 </p>
               </div>
               <div className="glass rounded-xl p-6">
@@ -351,7 +351,7 @@ export default function InvestWizard() {
                         size="sm"
                         variant={signedDocs[doc.key] ? "outline" : "default"}
                         onClick={() => setSignedDocs({ ...signedDocs, [doc.key]: !signedDocs[doc.key] })}
-                        className={signedDocs[doc.key] ? "" : "gradient-gold text-primary-foreground hover:opacity-90"}
+                        className={signedDocs[doc.key] ? "" : "btn-teal hover:opacity-90"}
                       >
                         {signedDocs[doc.key] ? "Signed ✓" : "Sign"}
                       </Button>
@@ -411,7 +411,7 @@ export default function InvestWizard() {
               <Button
                 onClick={() => investMutation.mutate()}
                 disabled={investMutation.isPending}
-                className="w-full h-12 gradient-gold text-primary-foreground hover:opacity-90 text-base font-semibold glow-gold"
+                className="w-full h-12 btn-teal text-base font-semibold glow-gold"
               >
                 {investMutation.isPending ? "Processing..." : "Confirm & Commit Investment"}
               </Button>
@@ -429,7 +429,7 @@ export default function InvestWizard() {
           <Button
             onClick={goNext}
             disabled={!canProceed()}
-            className="gradient-gold text-primary-foreground hover:opacity-90"
+            className="btn-teal hover:opacity-90"
           >
             Continue <ArrowRight className="w-4 h-4 ml-2" />
           </Button>

@@ -11,9 +11,9 @@ const documents = [
 ];
 
 const statusStyle: Record<string, string> = {
-  Signed: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-  Available: "text-primary bg-primary/10 border-primary/20",
-  Pending: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+  Signed: "text-emerald-700 bg-emerald-50 border-emerald-200",
+  Available: "text-brand-teal bg-brand-teal/10 border-brand-teal/20",
+  Pending: "text-amber-700 bg-amber-50 border-amber-200",
 };
 
 const itemVariants = {
@@ -33,7 +33,7 @@ export default function Documents() {
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mb-10"
       >
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">Documents</h1>
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-foreground">Documents</h1>
         <p className="text-muted-foreground">Manage subscription agreements, reports, and tax documents.</p>
       </motion.div>
 
@@ -53,7 +53,7 @@ export default function Documents() {
               transition={{ type: "spring", stiffness: 400 }}
               className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0"
             >
-              <FileText className="w-5 h-5 text-primary" />
+              <FileText className="w-5 h-5 text-brand-teal" />
             </motion.div>
             <div className="flex-1 min-w-0">
               <p className="font-medium truncate">{doc.name}</p>

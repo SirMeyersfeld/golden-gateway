@@ -54,7 +54,7 @@ export default function Portfolio() {
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mb-10"
       >
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">Portfolio</h1>
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-foreground">Portfolio</h1>
         <p className="text-muted-foreground">Track your investments and performance in real time.</p>
       </motion.div>
 
@@ -67,8 +67,8 @@ export default function Portfolio() {
             initial="hidden"
             animate="visible"
             custom={i}
-            whileHover={{ y: -4, scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-            className="glass rounded-xl p-5 cursor-default"
+            whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            className="bg-card border border-border rounded-xl p-5 cursor-default hover:shadow-lg transition-all duration-300"
           >
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm text-muted-foreground">{c.label}</span>
@@ -77,14 +77,14 @@ export default function Portfolio() {
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: i * 0.08 + 0.2, type: "spring", stiffness: 400 }}
               >
-                <c.icon className="w-4 h-4 text-primary" />
+                <c.icon className="w-4 h-4 text-brand-teal" />
               </motion.div>
             </div>
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 + 0.15 }}
-              className="text-2xl font-display font-bold"
+              className="text-2xl font-extrabold text-foreground"
             >
               {c.value}
             </motion.p>
@@ -93,7 +93,7 @@ export default function Portfolio() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: i * 0.08 + 0.3 }}
-                className="text-xs text-emerald-400 mt-1"
+                className="text-xs text-emerald-600 font-medium mt-1"
               >
                 {c.change} from last quarter
               </motion.p>
@@ -107,30 +107,31 @@ export default function Portfolio() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35, duration: 0.5 }}
-        className="glass rounded-xl p-6 mb-10"
+        className="bg-card border border-border rounded-xl p-6 mb-10 hover:shadow-lg transition-shadow duration-300"
       >
-        <h2 className="font-display text-lg font-semibold mb-6">Portfolio Value (in $K)</h2>
+        <h2 className="text-lg font-bold mb-6 text-foreground">Portfolio Value (in $K)</h2>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="brandGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.26} />
-                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  <stop offset="0%" stopColor="hsl(173, 58%, 39%)" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="hsl(173, 58%, 39%)" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 20% 18%)" />
-              <XAxis dataKey="month" stroke="hsl(220 15% 55%)" fontSize={12} />
-              <YAxis stroke="hsl(220 15% 55%)" fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 13%, 91%)" />
+              <XAxis dataKey="month" stroke="hsl(220, 9%, 46%)" fontSize={12} />
+              <YAxis stroke="hsl(220, 9%, 46%)" fontSize={12} />
               <Tooltip
                 contentStyle={{
-                  background: "hsl(var(--popover))",
-                  border: "1px solid hsl(var(--border))",
+                  background: "hsl(0, 0%, 100%)",
+                  border: "1px solid hsl(220, 13%, 91%)",
                   borderRadius: "8px",
-                  color: "hsl(var(--foreground))",
+                  color: "hsl(220, 25%, 10%)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
                 }}
               />
-              <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#brandGrad)" />
+              <Area type="monotone" dataKey="value" stroke="hsl(173, 58%, 39%)" strokeWidth={2} fill="url(#brandGrad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -141,20 +142,20 @@ export default function Portfolio() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45, duration: 0.5 }}
-        className="glass rounded-xl overflow-hidden"
+        className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
       >
         <div className="p-6 border-b border-border">
-          <h2 className="font-display text-lg font-semibold">Holdings</h2>
+          <h2 className="text-lg font-bold text-foreground">Holdings</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border text-muted-foreground">
-                <th className="text-left py-3 px-6 font-medium">Company</th>
-                <th className="text-right py-3 px-6 font-medium">Vintage</th>
-                <th className="text-right py-3 px-6 font-medium">Invested</th>
-                <th className="text-right py-3 px-6 font-medium">Current</th>
-                <th className="text-right py-3 px-6 font-medium">Net IRR</th>
+                <th className="text-left py-3 px-6 font-semibold">Company</th>
+                <th className="text-right py-3 px-6 font-semibold">Vintage</th>
+                <th className="text-right py-3 px-6 font-semibold">Invested</th>
+                <th className="text-right py-3 px-6 font-semibold">Current</th>
+                <th className="text-right py-3 px-6 font-semibold">Net IRR</th>
               </tr>
             </thead>
             <tbody>
@@ -165,15 +166,14 @@ export default function Portfolio() {
                   initial="hidden"
                   animate="visible"
                   custom={i}
-                  whileHover={{ backgroundColor: "hsl(222 22% 14%)", transition: { duration: 0.15 } }}
-                  className="border-b border-border/50 transition-colors cursor-default"
+                  className="border-b border-border/50 hover:bg-secondary/50 transition-colors cursor-default"
                 >
-                  <td className="py-4 px-6 font-medium">{h.name}</td>
+                  <td className="py-4 px-6 font-semibold text-foreground">{h.name}</td>
                   <td className="py-4 px-6 text-right text-muted-foreground">{h.vintage}</td>
-                  <td className="py-4 px-6 text-right">{h.invested}</td>
-                  <td className="py-4 px-6 text-right">{h.current}</td>
+                  <td className="py-4 px-6 text-right text-foreground">{h.invested}</td>
+                  <td className="py-4 px-6 text-right text-foreground">{h.current}</td>
                   <td className="py-4 px-6 text-right">
-                    <span className={`inline-flex items-center gap-1 ${h.up ? "text-emerald-400" : "text-red-400"}`}>
+                    <span className={`inline-flex items-center gap-1 font-semibold ${h.up ? "text-emerald-600" : "text-red-500"}`}>
                       {h.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                       {h.irr}
                     </span>

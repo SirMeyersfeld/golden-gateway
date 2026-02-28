@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/select";
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  open: { label: "Open", className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
-  closed: { label: "Closed", className: "bg-red-500/10 text-red-400 border-red-500/20" },
-  upcoming: { label: "Upcoming", className: "bg-primary/10 text-primary border-primary/20" },
+  open: { label: "Open", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+  closed: { label: "Closed", className: "bg-red-50 text-red-700 border-red-200" },
+  upcoming: { label: "Upcoming", className: "bg-brand-teal/10 text-brand-teal border-brand-teal/20" },
 };
 
 function formatCurrency(n: number) {
@@ -97,7 +97,7 @@ export default function Deals() {
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
-          <Loader2 className="w-8 h-8 text-primary" />
+          <Loader2 className="w-8 h-8 text-brand-teal" />
         </motion.div>
       </div>
     );
@@ -111,7 +111,7 @@ export default function Deals() {
         transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="mb-10"
       >
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-foreground">
           Deal Flow
         </h1>
         <p className="text-muted-foreground">
@@ -132,11 +132,11 @@ export default function Deals() {
             placeholder="Search deals..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
+            className="pl-9 bg-card border-border"
           />
         </div>
         <Select value={sectorFilter} onValueChange={setSectorFilter}>
-          <SelectTrigger className="w-full sm:w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px] bg-card">
             <SelectValue placeholder="Sector" />
           </SelectTrigger>
           <SelectContent>
@@ -147,7 +147,7 @@ export default function Deals() {
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-full sm:w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px] bg-card">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -158,15 +158,15 @@ export default function Deals() {
           </SelectContent>
         </Select>
         <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-          <SelectTrigger className="w-full sm:w-[170px]">
+          <SelectTrigger className="w-full sm:w-[170px] bg-card">
             <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
             <SelectValue placeholder="Sort" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="newest">Newest First</SelectItem>
             <SelectItem value="oldest">Oldest First</SelectItem>
-            <SelectItem value="target_high">Target: High → Low</SelectItem>
-            <SelectItem value="target_low">Target: Low → High</SelectItem>
+            <SelectItem value="target_high">{"Target: High -> Low"}</SelectItem>
+            <SelectItem value="target_low">{"Target: Low -> High"}</SelectItem>
             <SelectItem value="raised">Most Raised</SelectItem>
           </SelectContent>
         </Select>
@@ -198,25 +198,25 @@ export default function Deals() {
                   key={deal.id}
                   variants={cardVariants}
                   custom={i}
-                  whileHover={{ y: -6, scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                  whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                   whileTap={{ scale: 0.98 }}
-                  className="glass-hover rounded-xl overflow-hidden group cursor-pointer"
+                  className="bg-card border border-border rounded-xl overflow-hidden group cursor-pointer hover:shadow-lg hover:border-border transition-all duration-300"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">
+                        <h3 className="text-lg font-bold group-hover:text-brand-teal transition-colors text-foreground">
                           {deal.name}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          {deal.sector} · {deal.stage}
+                          {deal.sector} &middot; {deal.stage}
                         </p>
                       </div>
                       <motion.span
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: i * 0.07 + 0.2 }}
-                        className={`text-xs font-medium px-2.5 py-1 rounded-full border ${st.className}`}
+                        className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${st.className}`}
                       >
                         {st.label}
                       </motion.span>
@@ -227,23 +227,23 @@ export default function Deals() {
                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                           <TrendingUp className="w-3 h-3" /> Target IRR
                         </p>
-                        <p className="text-sm font-semibold text-primary">{deal.target_irr}</p>
+                        <p className="text-sm font-bold text-brand-teal">{deal.target_irr}</p>
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                           <DollarSign className="w-3 h-3" /> Minimum
                         </p>
-                        <p className="text-sm font-semibold">{formatCurrency(deal.minimum_investment)}</p>
+                        <p className="text-sm font-bold text-foreground">{formatCurrency(deal.minimum_investment)}</p>
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="w-3 h-3" /> Closing
                         </p>
-                        <p className="text-sm font-semibold">{deal.closing_date ?? "TBD"}</p>
+                        <p className="text-sm font-bold text-foreground">{deal.closing_date ?? "TBD"}</p>
                       </div>
                     </div>
 
-                    {/* Animated progress bar */}
+                    {/* Progress bar */}
                     <div className="mb-3">
                       <div className="flex justify-between text-xs mb-1.5">
                         <span className="text-muted-foreground">
@@ -258,7 +258,7 @@ export default function Deals() {
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(pct, 100)}%` }}
                           transition={{ delay: i * 0.07 + 0.3, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-                          className="h-full rounded-full gradient-gold"
+                          className="h-full rounded-full bg-brand-teal"
                         />
                       </div>
                     </div>
@@ -270,7 +270,7 @@ export default function Deals() {
                       >
                         <Link
                           to={`/invest?deal=${encodeURIComponent(deal.name)}`}
-                          className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all duration-200 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.1)]"
+                          className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-brand-teal/30 text-brand-teal text-sm font-semibold hover:bg-brand-teal/5 transition-all duration-200 hover:border-brand-teal/50"
                         >
                           Invest via SPV <ArrowUpRight className="w-3.5 h-3.5" />
                         </Link>
