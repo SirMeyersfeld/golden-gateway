@@ -63,7 +63,7 @@ export default function Auth() {
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg gradient-gold" />
             <span className="font-display text-xl font-semibold gradient-gold-text tracking-tight">
-              Vanguard Capital
+              Capital Harbour
             </span>
           </div>
 
