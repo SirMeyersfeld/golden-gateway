@@ -62,6 +62,8 @@ export default {
           light: "hsl(222 40% 12%)",
           mid: "hsl(222 35% 16%)",
         },
+        "brand-warm": "hsl(280 70% 60%)",
+        "brand-hot": "hsl(340 80% 60%)",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
