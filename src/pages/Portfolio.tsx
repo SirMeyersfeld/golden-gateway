@@ -30,18 +30,18 @@ const holdings = [
 ];
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  hidden: { opacity: 0, y: 24, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1, y: 0, scale: 1,
-    transition: { delay: i * 0.08, duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }),
 };
 
 const rowVariants = {
-  hidden: { opacity: 0, x: -12 },
+  hidden: { opacity: 0, x: -16 },
   visible: (i: number) => ({
     opacity: 1, x: 0,
-    transition: { delay: 0.5 + i * 0.06, duration: 0.35 },
+    transition: { delay: 0.5 + i * 0.06, duration: 0.4 },
   }),
 };
 
@@ -49,16 +49,17 @@ export default function Portfolio() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const }}
         className="mb-10"
       >
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">Portfolio</h1>
-        <p className="text-muted-foreground">Track your investments and performance in real time.</p>
+        <p className="section-label mb-3">Dashboard</p>
+        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">Portfolio</h1>
+        <p className="text-muted-foreground text-base sm:text-lg">Track your investments and performance in real time.</p>
       </motion.div>
 
-      {/* Summary */}
+      {/* Summary cards — bento style */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         {summaryCards.map((c, i) => (
           <motion.div
@@ -67,15 +68,16 @@ export default function Portfolio() {
             initial="hidden"
             animate="visible"
             custom={i}
-            whileHover={{ y: -4, scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-            className="glass rounded-xl p-5 cursor-default"
+            whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            className="bento-card p-5 cursor-default"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-muted-foreground">{c.label}</span>
+              <span className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{c.label}</span>
               <motion.div
                 initial={{ scale: 0, rotate: -45 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: i * 0.08 + 0.2, type: "spring", stiffness: 400 }}
+                className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center"
               >
                 <c.icon className="w-4 h-4 text-primary" />
               </motion.div>
@@ -84,7 +86,7 @@ export default function Portfolio() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 + 0.15 }}
-              className="text-2xl font-display font-bold"
+              className="text-2xl sm:text-3xl font-display font-bold"
             >
               {c.value}
             </motion.p>
@@ -93,7 +95,7 @@ export default function Portfolio() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: i * 0.08 + 0.3 }}
-                className="text-xs text-emerald-400 mt-1"
+                className="text-xs text-emerald-400 mt-1.5 font-medium"
               >
                 {c.change} from last quarter
               </motion.p>
@@ -104,10 +106,10 @@ export default function Portfolio() {
 
       {/* Chart */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35, duration: 0.5 }}
-        className="glass rounded-xl p-6 mb-10"
+        className="bento-card p-6 mb-10"
       >
         <h2 className="font-display text-lg font-semibold mb-6">Portfolio Value (in $K)</h2>
         <div className="h-72">
@@ -115,22 +117,23 @@ export default function Portfolio() {
             <AreaChart data={chartData}>
               <defs>
                 <linearGradient id="brandGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.26} />
+                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
                   <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 20% 18%)" />
-              <XAxis dataKey="month" stroke="hsl(220 15% 55%)" fontSize={12} />
-              <YAxis stroke="hsl(220 15% 55%)" fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(222 20% 16%)" />
+              <XAxis dataKey="month" stroke="hsl(220 15% 50%)" fontSize={12} />
+              <YAxis stroke="hsl(220 15% 50%)" fontSize={12} />
               <Tooltip
                 contentStyle={{
                   background: "hsl(var(--popover))",
                   border: "1px solid hsl(var(--border))",
-                  borderRadius: "8px",
+                  borderRadius: "12px",
                   color: "hsl(var(--foreground))",
+                  boxShadow: "0 8px 24px hsl(0 0% 0% / 0.2)",
                 }}
               />
-              <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#brandGrad)" />
+              <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2.5} fill="url(#brandGrad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -138,23 +141,23 @@ export default function Portfolio() {
 
       {/* Holdings table */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45, duration: 0.5 }}
-        className="glass rounded-xl overflow-hidden"
+        className="bento-card overflow-hidden"
       >
-        <div className="p-6 border-b border-border">
+        <div className="p-6 border-b border-border/50">
           <h2 className="font-display text-lg font-semibold">Holdings</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-muted-foreground">
-                <th className="text-left py-3 px-6 font-medium">Company</th>
-                <th className="text-right py-3 px-6 font-medium">Vintage</th>
-                <th className="text-right py-3 px-6 font-medium">Invested</th>
-                <th className="text-right py-3 px-6 font-medium">Current</th>
-                <th className="text-right py-3 px-6 font-medium">Net IRR</th>
+              <tr className="border-b border-border/40 text-muted-foreground">
+                <th className="text-left py-3.5 px-6 font-medium text-xs uppercase tracking-wider">Company</th>
+                <th className="text-right py-3.5 px-6 font-medium text-xs uppercase tracking-wider">Vintage</th>
+                <th className="text-right py-3.5 px-6 font-medium text-xs uppercase tracking-wider">Invested</th>
+                <th className="text-right py-3.5 px-6 font-medium text-xs uppercase tracking-wider">Current</th>
+                <th className="text-right py-3.5 px-6 font-medium text-xs uppercase tracking-wider">Net IRR</th>
               </tr>
             </thead>
             <tbody>
@@ -165,15 +168,14 @@ export default function Portfolio() {
                   initial="hidden"
                   animate="visible"
                   custom={i}
-                  whileHover={{ backgroundColor: "hsl(222 22% 14%)", transition: { duration: 0.15 } }}
-                  className="border-b border-border/50 transition-colors cursor-default"
+                  className="border-b border-border/30 hover:bg-muted/30 transition-colors cursor-default group"
                 >
-                  <td className="py-4 px-6 font-medium">{h.name}</td>
+                  <td className="py-4 px-6 font-medium group-hover:text-primary transition-colors">{h.name}</td>
                   <td className="py-4 px-6 text-right text-muted-foreground">{h.vintage}</td>
                   <td className="py-4 px-6 text-right">{h.invested}</td>
                   <td className="py-4 px-6 text-right">{h.current}</td>
                   <td className="py-4 px-6 text-right">
-                    <span className={`inline-flex items-center gap-1 ${h.up ? "text-emerald-400" : "text-red-400"}`}>
+                    <span className={`inline-flex items-center gap-1 font-medium ${h.up ? "text-emerald-400" : "text-red-400"}`}>
                       {h.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                       {h.irr}
                     </span>

@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { FileText, Download, Eye, Clock } from "lucide-react";
+import { FileText, Download, Eye, Clock, Search } from "lucide-react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 const documents = [
   { name: "Aether Robotics — Subscription Agreement", type: "Legal", date: "Feb 12, 2026", status: "Signed" },
@@ -17,49 +19,75 @@ const statusStyle: Record<string, string> = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, x: -16, scale: 0.98 },
+  hidden: { opacity: 0, y: 16, scale: 0.98 },
   visible: (i: number) => ({
-    opacity: 1, x: 0, scale: 1,
-    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    opacity: 1, y: 0, scale: 1,
+    transition: { delay: i * 0.07, duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] as const },
   }),
 };
 
 export default function Documents() {
+  const [search, setSearch] = useState("");
+  const filtered = documents.filter(
+    (doc) =>
+      !search ||
+      doc.name.toLowerCase().includes(search.toLowerCase()) ||
+      doc.type.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const }}
         className="mb-10"
       >
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">Documents</h1>
-        <p className="text-muted-foreground">Manage subscription agreements, reports, and tax documents.</p>
+        <p className="section-label mb-3">Vault</p>
+        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">Documents</h1>
+        <p className="text-muted-foreground text-base sm:text-lg">Manage subscription agreements, reports, and tax documents.</p>
+      </motion.div>
+
+      {/* Search */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.4 }}
+        className="mb-8"
+      >
+        <div className="relative max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Search documents..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10 h-11 bg-muted/40 border-border/50 rounded-xl focus:border-primary/40"
+          />
+        </div>
       </motion.div>
 
       <div className="space-y-3">
-        {documents.map((doc, i) => (
+        {filtered.map((doc, i) => (
           <motion.div
             key={doc.name}
             variants={itemVariants}
             initial="hidden"
             animate="visible"
             custom={i}
-            whileHover={{ x: 4, scale: 1.01, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-            className="glass-hover rounded-xl p-5 flex items-center gap-4"
+            whileHover={{ y: -2, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+            className="bento-card p-5 flex items-center gap-4"
           >
             <motion.div
-              whileHover={{ rotate: 8, scale: 1.1 }}
+              whileHover={{ rotate: 6, scale: 1.1 }}
               transition={{ type: "spring", stiffness: 400 }}
-              className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0"
+              className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center shrink-0"
             >
               <FileText className="w-5 h-5 text-primary" />
             </motion.div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">{doc.name}</p>
-              <p className="text-xs text-muted-foreground flex items-center gap-2 mt-0.5">
-                <span>{doc.type}</span>
-                <span>·</span>
+              <p className="font-medium truncate text-[15px]">{doc.name}</p>
+              <p className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
+                <span className="pill-badge !py-0 !px-2 !text-[10px] !border-border/40 !bg-muted/40 !text-muted-foreground">{doc.type}</span>
                 <Clock className="w-3 h-3" />
                 <span>{doc.date}</span>
               </p>
@@ -67,29 +95,38 @@ export default function Documents() {
             <motion.span
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: i * 0.06 + 0.2 }}
-              className={`text-xs font-medium px-2.5 py-1 rounded-full border shrink-0 ${statusStyle[doc.status]}`}
+              transition={{ delay: i * 0.07 + 0.2 }}
+              className={`text-[11px] font-medium px-2.5 py-1 rounded-full border shrink-0 ${statusStyle[doc.status]}`}
             >
               {doc.status}
             </motion.span>
-            <div className="flex gap-1.5 shrink-0">
+            <div className="flex gap-1 shrink-0">
               <motion.button
                 whileHover={{ scale: 1.15, y: -2 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+                className="p-2.5 rounded-xl hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground"
               >
                 <Eye className="w-4 h-4" />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.15, y: -2 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+                className="p-2.5 rounded-xl hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground"
               >
                 <Download className="w-4 h-4" />
               </motion.button>
             </div>
           </motion.div>
         ))}
+        {filtered.length === 0 && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16 text-muted-foreground"
+          >
+            No documents found.
+          </motion.p>
+        )}
       </div>
     </div>
   );

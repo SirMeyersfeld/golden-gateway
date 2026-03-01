@@ -34,12 +34,14 @@
     --input: 222 16% 18%;
     --ring: 217 92% 60%;
 
-    --radius: 0.625rem;
+    --radius: 0.75rem;
 
-    /* Brand accent spectrum (not just blue/purple) */
-    --brand-start: 215 95% 60%; /* electric blue */
-    --brand-mid: 190 95% 55%;   /* cyan */
-    --brand-end: 152 72% 46%;   /* emerald */
+    /* Brand accent spectrum — Stripe-inspired warm-to-cool */
+    --brand-start: 215 95% 60%;
+    --brand-mid: 190 95% 55%;
+    --brand-end: 152 72% 46%;
+    --brand-warm: 280 70% 60%;
+    --brand-hot: 340 80% 60%;
     --ink-deep: 222 55% 6%;
     --ink-mid: 222 40% 12%;
 
@@ -52,7 +54,6 @@
     --sidebar-border: 222 16% 18%;
     --sidebar-ring: 217 92% 60%;
 
-    /* Trust green for positive indicators */
     --success: 152 55% 42%;
     --success-foreground: 152 10% 95%;
   }
@@ -72,7 +73,6 @@
     font-family: 'Space Grotesk', system-ui, sans-serif;
   }
 
-  /* Better scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
   }
@@ -89,6 +89,7 @@
 }
 
 @layer utilities {
+  /* === Gradients === */
   .gradient-gold {
     background: linear-gradient(
       135deg,
@@ -103,6 +104,15 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Stripe-inspired warm gradient mesh */
+  .gradient-mesh {
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, hsl(var(--brand-warm) / 0.12), transparent 50%),
+      radial-gradient(ellipse 70% 50% at 80% 20%, hsl(var(--brand-hot) / 0.08), transparent 50%),
+      radial-gradient(ellipse 90% 70% at 50% 80%, hsl(var(--brand-start) / 0.10), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 90% 70%, hsl(var(--brand-end) / 0.06), transparent 50%);
   }
 
   .hero-wordmark {
@@ -129,6 +139,7 @@
     will-change: transform, opacity;
   }
 
+  /* === Glass effects === */
   .glass {
     background: hsl(var(--card) / 0.65);
     backdrop-filter: blur(24px);
@@ -139,7 +150,9 @@
     background: hsl(var(--card) / 0.78);
     backdrop-filter: blur(20px);
     border: 1px solid hsl(var(--border) / 0.55);
-    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.2), 0 4px 16px hsl(0 0% 0% / 0.1);
+    box-shadow:
+      0 1px 2px hsl(0 0% 0% / 0.2),
+      0 4px 16px hsl(0 0% 0% / 0.1);
   }
 
   .glass-hover {
@@ -149,9 +162,35 @@
   .glass-hover:hover {
     background: hsl(var(--card) / 0.88);
     border-color: hsl(var(--primary) / 0.25);
-    box-shadow: 0 4px 24px hsl(var(--primary) / 0.08), 0 1px 2px hsl(0 0% 0% / 0.2);
+    box-shadow:
+      0 4px 24px hsl(var(--primary) / 0.08),
+      0 1px 2px hsl(0 0% 0% / 0.2);
+    transform: translateY(-2px);
   }
 
+  /* Bento card — DirectDebit style with stronger glass */
+  .bento-card {
+    background: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(32px) saturate(1.4);
+    border: 1px solid hsl(var(--border) / 0.5);
+    border-radius: var(--radius);
+    box-shadow:
+      0 0 0 1px hsl(0 0% 100% / 0.03) inset,
+      0 2px 4px hsl(0 0% 0% / 0.15),
+      0 8px 24px hsl(0 0% 0% / 0.08);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .bento-card:hover {
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.06) inset,
+      0 8px 32px hsl(var(--primary) / 0.1),
+      0 2px 4px hsl(0 0% 0% / 0.15);
+    transform: translateY(-4px);
+  }
+
+  /* === Glow & borders === */
   .glow-gold {
     box-shadow: 0 0 24px hsl(var(--primary) / 0.14), 0 0 56px hsl(var(--primary) / 0.05);
   }
@@ -164,7 +203,7 @@
     text-wrap: balance;
   }
 
-  /* Subtle noise texture overlay */
+  /* === Texture overlays === */
   .texture-noise::before {
     content: '';
     position: absolute;
@@ -174,12 +213,37 @@
     pointer-events: none;
   }
 
-  /* Refined divider */
   .divider-gold {
     height: 1px;
     background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.35), transparent);
   }
 
+  /* === Pill badge — DirectDebit style === */
+  .pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: 9999px;
+    border: 1px solid hsl(var(--primary) / 0.2);
+    background: hsl(var(--primary) / 0.06);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+
+  /* === Stripe-style section heading === */
+  .section-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+
+  /* === Animations === */
   @keyframes hero-sheen {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -192,12 +256,22 @@
     100% { transform: translate3d(-6%, -2%, 0) scale(1.06); opacity: 0.55; }
   }
 
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
   .aurora {
     background:
       radial-gradient(900px 500px at 15% 10%, hsl(var(--brand-start) / 0.10), transparent 60%),
       radial-gradient(700px 420px at 85% 25%, hsl(var(--brand-mid) / 0.10), transparent 60%),
       radial-gradient(820px 520px at 60% 85%, hsl(var(--brand-end) / 0.09), transparent 62%),
-      radial-gradient(720px 460px at 20% 80%, hsl(var(--brand-mid) / 0.06), transparent 60%);
+      radial-gradient(720px 460px at 20% 80%, hsl(var(--brand-warm) / 0.06), transparent 60%);
     filter: blur(18px);
     animation: aurora-shift 18s ease-in-out infinite;
     will-change: transform, opacity;
@@ -205,11 +279,11 @@
 
   .grid-overlay {
     background-image:
-      linear-gradient(to right, hsl(0 0% 100% / 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(0 0% 100% / 0.045) 1px, transparent 1px);
-    background-size: 56px 56px;
+      linear-gradient(to right, hsl(0 0% 100% / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(0 0% 100% / 0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
     mask-image: radial-gradient(ellipse at 50% 0%, black 35%, transparent 75%);
-    opacity: 0.28;
+    opacity: 0.22;
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -23,14 +23,14 @@ function formatCurrency(n: number) {
 type SortOption = "newest" | "oldest" | "target_high" | "target_low" | "raised";
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  hidden: { opacity: 0, y: 28, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      delay: i * 0.07,
-      duration: 0.45,
+      delay: i * 0.08,
+      duration: 0.5,
       ease: [0.25, 0.46, 0.45, 0.94] as const,
     },
   }),
@@ -105,38 +105,40 @@ export default function Deals() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* Page header */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const }}
         className="mb-10"
       >
-        <h1 className="font-display text-3xl sm:text-4xl font-bold mb-2">
+        <p className="section-label mb-3">Investments</p>
+        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-3">
           Deal Flow
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-base sm:text-lg max-w-xl">
           Curated private equity opportunities across sectors and stages.
         </p>
       </motion.div>
 
-      {/* Filters */}
+      {/* Filters — pill style */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.4 }}
-        className="flex flex-col sm:flex-row gap-3 mb-8"
+        className="flex flex-col sm:flex-row gap-3 mb-10"
       >
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search deals..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
+            className="pl-10 h-11 bg-muted/40 border-border/50 rounded-xl focus:border-primary/40"
           />
         </div>
         <Select value={sectorFilter} onValueChange={setSectorFilter}>
-          <SelectTrigger className="w-full sm:w-[160px]">
+          <SelectTrigger className="w-full sm:w-[160px] h-11 rounded-xl bg-muted/40 border-border/50">
             <SelectValue placeholder="Sector" />
           </SelectTrigger>
           <SelectContent>
@@ -147,7 +149,7 @@ export default function Deals() {
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-full sm:w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px] h-11 rounded-xl bg-muted/40 border-border/50">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -158,7 +160,7 @@ export default function Deals() {
           </SelectContent>
         </Select>
         <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-          <SelectTrigger className="w-full sm:w-[170px]">
+          <SelectTrigger className="w-full sm:w-[170px] h-11 rounded-xl bg-muted/40 border-border/50">
             <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
             <SelectValue placeholder="Sort" />
           </SelectTrigger>
@@ -179,7 +181,7 @@ export default function Deals() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="text-center py-16 text-muted-foreground"
+            className="text-center py-20 text-muted-foreground"
           >
             No deals match your filters.
           </motion.div>
@@ -198,54 +200,53 @@ export default function Deals() {
                   key={deal.id}
                   variants={cardVariants}
                   custom={i}
-                  whileHover={{ y: -6, scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-                  whileTap={{ scale: 0.98 }}
-                  className="glass-hover rounded-xl overflow-hidden group cursor-pointer"
+                  whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                  className="bento-card overflow-hidden group cursor-pointer"
                 >
                   <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-5">
                       <div>
                         <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">
                           {deal.name}
                         </h3>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground mt-0.5">
                           {deal.sector} · {deal.stage}
                         </p>
                       </div>
                       <motion.span
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: i * 0.07 + 0.2 }}
-                        className={`text-xs font-medium px-2.5 py-1 rounded-full border ${st.className}`}
+                        transition={{ delay: i * 0.08 + 0.2 }}
+                        className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${st.className}`}
                       >
                         {st.label}
                       </motion.span>
                     </div>
 
                     <div className="grid grid-cols-3 gap-3 mb-5">
-                      <div>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3" /> Target IRR
+                      <div className="bg-muted/30 rounded-lg p-2.5">
+                        <p className="text-[10px] text-muted-foreground flex items-center gap-1 mb-1">
+                          <TrendingUp className="w-3 h-3" /> IRR
                         </p>
-                        <p className="text-sm font-semibold text-primary">{deal.target_irr}</p>
+                        <p className="text-sm font-bold text-primary">{deal.target_irr}</p>
                       </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                          <DollarSign className="w-3 h-3" /> Minimum
+                      <div className="bg-muted/30 rounded-lg p-2.5">
+                        <p className="text-[10px] text-muted-foreground flex items-center gap-1 mb-1">
+                          <DollarSign className="w-3 h-3" /> Min
                         </p>
-                        <p className="text-sm font-semibold">{formatCurrency(deal.minimum_investment)}</p>
+                        <p className="text-sm font-bold">{formatCurrency(deal.minimum_investment)}</p>
                       </div>
-                      <div>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> Closing
+                      <div className="bg-muted/30 rounded-lg p-2.5">
+                        <p className="text-[10px] text-muted-foreground flex items-center gap-1 mb-1">
+                          <Clock className="w-3 h-3" /> Close
                         </p>
-                        <p className="text-sm font-semibold">{deal.closing_date ?? "TBD"}</p>
+                        <p className="text-sm font-bold">{deal.closing_date ?? "TBD"}</p>
                       </div>
                     </div>
 
-                    {/* Animated progress bar */}
-                    <div className="mb-3">
-                      <div className="flex justify-between text-xs mb-1.5">
+                    {/* Progress */}
+                    <div className="mb-4">
+                      <div className="flex justify-between text-[11px] mb-1.5">
                         <span className="text-muted-foreground">
                           {formatCurrency(deal.raised_amount)} raised
                         </span>
@@ -257,20 +258,17 @@ export default function Deals() {
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(pct, 100)}%` }}
-                          transition={{ delay: i * 0.07 + 0.3, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                          transition={{ delay: i * 0.08 + 0.3, duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] as const }}
                           className="h-full rounded-full gradient-gold"
                         />
                       </div>
                     </div>
 
                     {deal.status === "open" && (
-                      <motion.div
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
+                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
                         <Link
                           to={`/invest?deal=${encodeURIComponent(deal.name)}`}
-                          className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all duration-200 hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.1)]"
+                          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-primary/30 text-primary text-sm font-medium hover:bg-primary/10 transition-all duration-200 hover:border-primary/50 hover:shadow-[0_0_24px_hsl(var(--primary)/0.12)]"
                         >
                           Invest via SPV <ArrowUpRight className="w-3.5 h-3.5" />
                         </Link>
